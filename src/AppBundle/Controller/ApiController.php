@@ -22,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * API controller.
@@ -312,6 +313,39 @@ class ApiController extends Controller
 		$em->flush();
 
 		return new JsonResponse(['info' => 'Vrácení proběhla v pořádku']);
+	}
+
+	/**
+	 * return book image
+	 *
+	 * @Route("/book/image/{id}", name="api_book_image")
+	 * @Method("GET")
+	 */
+	public function bookImageAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$book = $em->getRepository(Book::class)->find($id);
+		$response = new Response(stream_get_contents($book->getImage()), 200, [
+			'Content-Type' => 'image/jpeg',
+		]);
+
+		return $response;
+	}
+
+	/**
+	 * return book
+	 *
+	 * @Route("/book/book/{id}", name="api_book_book")
+	 * @Method("GET")
+	 */
+	public function bookBookAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$book = $em->getRepository(Book::class)->find($id);
+		$response = new Response(stream_get_contents($book->getBook()), 200, [
+			'Content-Type' => $book->getMime(),
+		]);
+		return $response;
 	}
 
 	private function getBookDql($em)

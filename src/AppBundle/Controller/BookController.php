@@ -47,7 +47,20 @@ class BookController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($book);
+
+	        if ($book->getImage() != null) {
+		        $handle = fopen($book->getImage(), 'r');
+		        $bytes = fread($handle, filesize($book->getImage()));
+		        $book->setImage($bytes);
+	        }
+
+	        if ($book->getBook() != null) {
+		        $handle = fopen($book->getBook(), 'r');
+		        $bytes = fread($handle, filesize($book->getBook()));
+		        $book->setBook($bytes);
+	        }
+
+	        $em->persist($book);
             $em->flush();
 
             // TODO push notifikace

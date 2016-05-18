@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,13 @@ class BookType extends AbstractType
             ->add('detailLink')
             ->add('image', FileType::class)
             ->add('book', FileType::class)
+	        ->add('mime', ChoiceType::class, [
+		        'choices'  => [
+			        'PDF' => 'application/pdf',
+			        'Kindle' => 'application/vnd.amazon.ebook',
+			        'EPUB' => 'application/x-dtbook+xml',
+		        ],
+            ])
             ->add('lang')
             ->add('form')
             ->add('tags')

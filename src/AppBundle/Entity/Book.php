@@ -12,39 +12,6 @@ class Book
 {
 
 	/**
-	"book_id": "1",
-	"name": "Zend framework in action",
-	"detail_link": "https://google.com",
-	"lang": "en",
-	"form": "paper",
-	"tags": [
-	"Vývoj",
-	"Marketing"
-	],
-	"total": 3,
-	"available": [
-	{
-	"place": "praha",
-	"quantity": 1
-	},
-	{
-	"place": "liberec",
-	"quantity": 0
-	}
-	],
-	"holders": [
-	{
-	"user": "Tomas Pesek",
-	"from": "2016-04-01"
-	},
-	{
-	"user": "Pokusny Kralik",
-	"from": "2016-04-04"
-	}
-	]
-	 */
-
-	/**
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -70,6 +37,11 @@ class Book
 	 * @ORM\Column(type="blob", nullable=true)
 	 */
 	public $book;
+
+	/**
+	 * @ORM\Column(type="string", length=32, nullable=true)
+	 */
+	public $mime;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lang")
@@ -209,5 +181,36 @@ class Book
 		return $this->name;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getBook()
+	{
+		return $this->book;
+	}
+
+	/**
+	 * @param mixed $book
+	 */
+	public function setBook($book)
+	{
+		$this->book = $book;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMime()
+	{
+		return $this->mime;
+	}
+
+	/**
+	 * @param mixed $mime
+	 */
+	public function setMime($mime)
+	{
+		$this->mime = $mime;
+	}
 
 }

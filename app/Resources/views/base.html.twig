@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Library API{% endblock %}</title>
+
+        {% stylesheets '@AppBundle/Resources/public/css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        <div id="content">
+            {% block body %}{% endblock %}
+
+
+            {% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) != '/' %}
+            <a href="{{ path('homepage') }}">Back</a>
+            {% endif %}
+
+        </div>
+        {% javascripts '@AppBundle/Resources/public/js/*' %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

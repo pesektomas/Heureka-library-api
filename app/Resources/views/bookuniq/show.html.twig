@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>BookUniq</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Code</th>
+                <td>{{ bookUniq.code }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bookuniq_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('bookuniq_edit', { 'id': bookUniq.code }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

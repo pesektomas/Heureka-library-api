@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lang</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Short</th>
+                <td>{{ lang.short }}</td>
+            </tr>
+            <tr>
+                <th>Lang</th>
+                <td>{{ lang.lang }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('lang_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('lang_edit', { 'id': lang.short }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>InternalBook list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Book</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for internalBook in internalBooks %}
+            <tr>
+                <td><a href="{{ path('internalbook_show', { 'id': internalBook.id }) }}">{{ internalBook.id }}</a></td>
+                <td>{% if internalBook.date %}{{ internalBook.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ internalBook.book }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('internalbook_show', { 'id': internalBook.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('internalbook_edit', { 'id': internalBook.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('internalbook_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

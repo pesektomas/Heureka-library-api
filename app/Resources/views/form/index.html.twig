@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Form list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Short</th>
+                <th>Form</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for form in forms %}
+            <tr>
+                <td><a href="{{ path('form_show', { 'id': form.short }) }}">{{ form.short }}</a></td>
+                <td>{{ form.form }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('form_show', { 'id': form.short }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('form_edit', { 'id': form.short }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('form_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

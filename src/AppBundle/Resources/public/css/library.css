@@ -1,0 +1,15 @@
+#content {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.pb25 {
+    margin: 0px;
+    height: 1px;
+    padding: 0px 0px 24px 0px ;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}

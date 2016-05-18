@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Form</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Short</th>
+                <td>{{ form.short }}</td>
+            </tr>
+            <tr>
+                <th>Form</th>
+                <td>{{ form.form }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('form_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('form_edit', { 'id': form.short }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

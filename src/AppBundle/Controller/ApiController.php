@@ -348,6 +348,20 @@ class ApiController extends Controller
 		return $response;
 	}
 
+	/**
+	 * return apis
+	 *
+	 * @Route("/list", name="api_list")
+	 * @Method("GET")
+	 */
+	public function apiListAction()
+	{
+		return new JsonResponse([
+			'Apiary' => 'http://private-e52603-heurekalibrary.apiary-mock.com',
+			'Fiction-group.eu' => 'https://library.fiction-group.eu/api/v1',
+		]);
+	}
+
 	private function getBookDql($em)
 	{
 		$qb = $em->createQueryBuilder();

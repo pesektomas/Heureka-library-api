@@ -87,7 +87,7 @@ class ApiController extends Controller
 	/**
 	 * get books
 	 *
-	 * @Route("/books", name="api_book")
+	 * @Route("/books", name="api_books")
 	 * @Method("GET")
 	 */
 	public function bookAction()
@@ -357,8 +357,14 @@ class ApiController extends Controller
 	public function apiListAction()
 	{
 		return new JsonResponse([
-			'Apiary' => 'http://private-e52603-heurekalibrary.apiary-mock.com',
-			'Fiction-group.eu' => 'https://library.fiction-group.eu/api/v1',
+			[
+				'name' => 'Apiary',
+				'address' => 'http://private-e52603-heurekalibrary.apiary-mock.com',
+			],
+			[
+				'name' => 'Fiction-group.eu',
+				'address' => 'https://library.fiction-group.eu/api/v1',
+			]
 		]);
 	}
 

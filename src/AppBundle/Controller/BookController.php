@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\AndroidPush;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -63,7 +64,8 @@ class BookController extends Controller
 	        $em->persist($book);
             $em->flush();
 
-            // TODO push notifikace
+            $androidPush = new AndroidPush();
+            $androidPush->push($this->getParameter("google"));
 
             return $this->redirectToRoute('book_show', array('id' => $book->getBookId()));
         }

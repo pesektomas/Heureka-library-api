@@ -379,11 +379,11 @@ class ApiController extends Controller
 		return new JsonResponse([
 			[
 				'name' => 'Apiary',
-				'address' => 'http://private-e52603-heurekalibrary.apiary-mock.com',
+				'address' => 'http://private-e52603-heurekalibrary.apiary-mock.com/v1/',
 			],
 			[
 				'name' => 'Fiction-group.eu',
-				'address' => 'https://library.fiction-group.eu/api/v1',
+				'address' => 'https://library.fiction-group.eu/api/v1/',
 			]
 		]);
 	}

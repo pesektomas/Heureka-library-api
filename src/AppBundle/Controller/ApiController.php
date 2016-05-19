@@ -349,6 +349,26 @@ class ApiController extends Controller
 	}
 
 	/**
+	 * add suer
+	 *
+	 * @Route("/add-user/{name}/email/{email}", name="api_add-user")
+	 * @Method("POST")
+	 */
+	public function addUserAction($name, $email)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$user = new User();
+		$user->setName($name);
+		$user->setEmail($email);
+		$user->setAuth(false);
+
+		$em->persist($user);
+		$em->flush();
+
+		return new JsonResponse(['info' => 'Váš požadavek byl přijat']);
+	}
+
+	/**
 	 * return apis
 	 *
 	 * @Route("/list", name="api_list")

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\AndroidPush;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -117,7 +118,9 @@ class UserController extends Controller
         $em->flush();
 
 	    if($user->getAuth()) {
-		    // TODO push
+		    // TODO DI
+		    $push = new AndroidPush();
+		    $push->push($this->getParameter("google"));
 	    }
 
 	    return $this->redirectToRoute('user_index');

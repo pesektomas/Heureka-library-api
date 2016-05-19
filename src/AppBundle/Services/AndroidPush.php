@@ -1,13 +1,13 @@
 <?php
 
-namespace AppBundle\Service;
+namespace AppBundle\Services;
 
 class AndroidPush
 {
 
 	public function push($accessKey)
 	{
-		$registrationIds = array( $_GET['id'] );
+		$registrationIds = 1;
 		$msg =
 		[
 			'message' 	=> 'here is a message. message',

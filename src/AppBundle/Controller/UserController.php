@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Service\AndroidPush;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -119,7 +118,7 @@ class UserController extends Controller
 
 	    if($user->getAuth()) {
 		    // TODO DI
-		    $push = new AndroidPush();
+		    $push = $this->get("android.push");
 		    $push->push($this->getParameter("google"));
 	    }
 

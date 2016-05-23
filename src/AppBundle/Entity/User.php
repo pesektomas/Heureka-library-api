@@ -34,6 +34,11 @@ class User
 	public $name;
 
 	/**
+	 * @ORM\Column(type="text")
+	 */
+	public $googleToken;
+
+	/**
 	 * @return mixed
 	 */
 	public function getEmail()
@@ -79,6 +84,22 @@ class User
 	public function setName($name)
 	{
 		$this->name = $name;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getGoogleToken()
+	{
+		return $this->googleToken;
+	}
+
+	/**
+	 * @param mixed $googleToken
+	 */
+	public function setGoogleToken($googleToken)
+	{
+		$this->googleToken = $googleToken;
 	}
 
 }

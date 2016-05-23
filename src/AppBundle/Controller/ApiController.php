@@ -384,6 +384,29 @@ class ApiController extends Controller
 	}
 
 	/**
+	 * add user token
+	 *
+	 * @Route("/user-token/{email}/{token}", name="api_add-user-token")
+	 * @Method("POST")
+	 */
+	public function addUserTokenAction($email, $token)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		if($em->find(User::class, $email) == null) {
+			return new JsonResponse([]);
+		}
+
+		$user = $em->find(User::class, $email);
+		$user->setGoogleToken($token);
+
+		$em->persist($user);
+		$em->flush();
+
+		return new JsonResponse(['info' => 'Token byl uložen']);
+	}
+
+	/**
 	 * return apis
 	 *
 	 * @Route("/list", name="api_list")

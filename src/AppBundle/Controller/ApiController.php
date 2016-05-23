@@ -192,7 +192,7 @@ class ApiController extends Controller
 			];
 		}
 
-		return new JsonResponse($history);
+		return new JsonResponse($bHistory);
 	}
 
 	/**

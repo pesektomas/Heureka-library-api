@@ -148,6 +148,7 @@ class UserController extends Controller
             curl_setopt( $ch,CURLOPT_POST, true );
             curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
             curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYHOST, true );
             curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, true );
             curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
             $result = curl_exec($ch );

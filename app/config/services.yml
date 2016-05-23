@@ -4,4 +4,5 @@ parameters:
     google: ""
 
 services:
-
+    android.push:
+        class: AppBundle\Services\AndroidPush

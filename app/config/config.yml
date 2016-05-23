@@ -75,3 +75,7 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+
+
+parameters:
+    android: AIzaSyDGsibOZwMkB9m92TP5qcWPUxpx_zGqU38

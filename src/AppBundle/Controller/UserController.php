@@ -18,19 +18,6 @@ use AppBundle\Form\UserType;
 class UserController extends Controller
 {
 
-    /** @var AndroidPush $androidPush */
-    private $androidPush;
-
-    /**
-     * UserController constructor.
-     * @param AndroidPush $androidPush
-     */
-    public function __construct(AndroidPush $androidPush)
-    {
-        $this->androidPush = $androidPush;
-    }
-
-
     /**
      * Lists all User entities.
      *
@@ -133,7 +120,9 @@ class UserController extends Controller
 
 	    if($user->getAuth()) {
             $registrationIds = array("dWwphjN1e3c:APA91bHIJKflCHDY1i8OcDpOd1mtjLjAapVEAOeX1B6w02lBpLb9fg93Xu5xUNrRFbJfIrjgry8ouA3WxCxQ6bcRasqEW3rYxWl839SKD1WnsyrRjtJpDPWGC1KeIrMcxSMA7h-BkleZ");
-            $this->androidPush->push($this->getParameter('android'), $registrationIds, 'Schváleno', 'Váš účet je aktivní');
+
+            $this->get('android.push')
+            ->push($this->getParameter('android'), $registrationIds, 'Schváleno', 'Váš účet je aktivní');
 	    }
 
 	    return $this->redirectToRoute('user_index');

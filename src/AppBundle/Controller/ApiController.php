@@ -146,7 +146,7 @@ class ApiController extends Controller
 	/**
 	 * get book detail
 	 *
-	 * @Route("/book/code/{code}", name="api_book")
+	 * @Route("/book/{code}", name="api_book")
 	 * @Method("GET")
 	 */
 	public function bookDetailAction($code)

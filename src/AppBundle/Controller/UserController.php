@@ -119,12 +119,41 @@ class UserController extends Controller
 
 	    if($user->getAuth()) {
 
-            $message = new AndroidMessage();
+            /*$message = new AndroidMessage();
             $message->setMessage('Oh my! A push notification!');
             $message->setDeviceIdentifier('dSzRu0dmVDY:APA91bHJOhC32R0elkoG8zYKtwgHsvKKBVv5a-6PeGkfMsXZctojH2UMMrixEEOyjX9mgCWb201B5Hab5PRrCRvW18XqDjPvNzVJDwXBUoRurPGUmV9Fb_QsoxLQPbK3Gr_1-nCq1aR2');
             $message->setGCM(true);
-            $this->container->get('rms_push_notifications')->send($message);
 
+
+            $response = $this->container->get('rms_push_notifications')->send($message);*/
+
+            $msg = array
+            (
+                'message' 	=> 'here is a message. message',
+            );
+            $fields = array
+            (
+                'registration_ids' 	=> ['dSzRu0dmVDY:APA91bHJOhC32R0elkoG8zYKtwgHsvKKBVv5a-6PeGkfMsXZctojH2UMMrixEEOyjX9mgCWb201B5Hab5PRrCRvW18XqDjPvNzVJDwXBUoRurPGUmV9Fb_QsoxLQPbK3Gr_1-nCq1aR2'],
+                'data'			=> $msg
+            );
+
+            $headers = array
+            (
+                'Authorization: key=' . 'AIzaSyDGsibOZwMkB9m92TP5qcWPUxpx_zGqU38',
+                'Content-Type: application/json'
+            );
+
+            $ch = curl_init();
+            curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+            curl_setopt( $ch,CURLOPT_POST, true );
+            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            $result = curl_exec($ch );
+            curl_close( $ch );
+            echo $result;
+            die();
 	    }
 
 	    return $this->redirectToRoute('user_index');

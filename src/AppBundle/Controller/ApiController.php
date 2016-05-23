@@ -93,14 +93,8 @@ class ApiController extends Controller
 	public function bookAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$qb = $em->createQueryBuilder();
-		$workingBooks = $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
-			->from(Book::class, 'b')
-			->innerJoin('b.lang', 'l')
-			->innerJoin('b.form', 'f')
-			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
-			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
-			->orderBy('b.name', 'ASC')
+
+		$workingBooks = self::getBookDql($em)
 			->getQuery()
 			->getResult();
 
@@ -116,6 +110,7 @@ class ApiController extends Controller
 	public function internalBookAction()
 	{
 		$em = $this->getDoctrine()->getManager();
+
 		$qb = $em->createQueryBuilder();
 		$internalBooks = $qb->select(['b.date', 'b.id'])
 			->from(InternalBook::class, 'b')
@@ -135,19 +130,11 @@ class ApiController extends Controller
 	public function myBookAction($user)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$qb = $em->createQueryBuilder();
-		$workingBooks = $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
-			->from(Book::class, 'b')
-			->innerJoin('b.lang', 'l')
-			->innerJoin('b.form', 'f')
-			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
-			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
-			->orderBy('b.name', 'ASC')
+		$workingBooks = self::getBookDql($em)
 			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
 			->innerJoin('bh.user', 'u')
-			->where('u.email = :email')
-			->where('bh.to IS NULL')
-			->setParameters(['email' => $user])
+			->where('bh.to IS NULL AND u.email = :user')
+			->setParameter('user', $user)
 			->getQuery()
 			->getResult();
 
@@ -163,15 +150,7 @@ class ApiController extends Controller
 	public function bookDetailAction($code)
 	{
 		$em = $this->getDoctrine()->getManager();
-
-		$qb = $em->createQueryBuilder();
-		$workingBooks = $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
-			->from(Book::class, 'b')
-			->innerJoin('b.lang', 'l')
-			->innerJoin('b.form', 'f')
-			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
-			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
-			->orderBy('b.name', 'ASC')
+		$workingBooks = self::getBookDql($em)
 			->where('bu.code = :code')
 			->setParameter('code', $code)
 			->getQuery()
@@ -212,14 +191,7 @@ class ApiController extends Controller
 	public function myBookHistoryAction($user)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$qb = $em->createQueryBuilder();
-		$workingBooks = $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
-			->from(Book::class, 'b')
-			->innerJoin('b.lang', 'l')
-			->innerJoin('b.form', 'f')
-			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
-			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
-			->orderBy('b.name', 'ASC')
+		$workingBooks = self::getBookDql($em)
 			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
 			->innerJoin('bh.user', 'u')
 			->where('u.email = :email')
@@ -413,7 +385,7 @@ class ApiController extends Controller
 		]);
 	}
 
-	/*private function getBookDql($em)
+	private function getBookDql($em)
 	{
 		$qb = $em->createQueryBuilder();
 		return $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
@@ -424,7 +396,7 @@ class ApiController extends Controller
 			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
 			->orderBy('b.name', 'ASC')
 			;
-	}*/
+	}
 
 	private function prepareBook($em, $workingBooks)
 	{

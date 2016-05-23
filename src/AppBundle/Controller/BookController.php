@@ -68,7 +68,9 @@ class BookController extends Controller
 	        $qb = $em->createQueryBuilder();
 	        $users = $qb->select(['u.googleToken'])
 		        ->from(User::class, 'u')
-		        ->where('u.googleToken IS NOT NULL');
+		        ->where('u.googleToken IS NOT NULL')
+		        ->getQuery()
+		        ->getResult();
 
 	        $tokens = [];
 

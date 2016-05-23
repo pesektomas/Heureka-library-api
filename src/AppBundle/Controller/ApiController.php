@@ -169,7 +169,7 @@ class ApiController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$qb = $em->createQueryBuilder();
-		$bookHisotry = $qb->select(['u.name AS user_name', 'bh.type AS type', 'bh.from AS date', 'bh.to AS return', 'bh.rate AS rate'])
+		$bookHisotry = $qb->select(['u.name AS user_name', 'bh.type AS type', 'bh.from AS date', 'bh.to AS return', 'bh.rate AS rate', 'bh.rateText AS text_rate'])
 			->from(BookHolder::class, 'bh')
 			->innerJoin('bh.bookUniq', 'bu')
 			->innerJoin('bu.book', 'b')
@@ -180,7 +180,19 @@ class ApiController extends Controller
 			->getQuery()
 			->getResult();
 
-		return new JsonResponse($bookHisotry);
+		$bHistory = [];
+		foreach ($bookHisotry as $history) {
+			$bHistory[] = [
+				'user_name' => $history['user_name'],
+				'type' => $history['type'],
+				'date' => $history['date']->format("Y-m-d"),
+				'return' => $history['return'] != null ? $history['return']->format("Y-m-d") : '',
+				'rate' => $history['rate'],
+				'text_rate' => $history['text_rate'],
+			];
+		}
+
+		return new JsonResponse($history);
 	}
 
 	/**

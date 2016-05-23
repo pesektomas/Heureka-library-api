@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use AppBundle\Service\AndroidPush;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -64,8 +65,19 @@ class BookController extends Controller
 	        $em->persist($book);
             $em->flush();
 
-            $androidPush = new AndroidPush();
-            $androidPush->push($this->getParameter("google"));
+	        $qb = $em->createQueryBuilder();
+	        $users = $qb->select(['u.googleToken'])
+		        ->from(User::class, 'u')
+		        ->where('u.googleToken IS NOT NULL');
+
+	        $tokens = [];
+
+	        foreach ($users as $user) {
+		        $tokens[] = $user['googleToken'];
+	        }
+
+	        $this->get('android.push')
+		        ->push($this->getParameter('android'), $tokens, 'Nová kniha', 'Byla vložena nová kniha - ' . $book->getName());
 
             return $this->redirectToRoute('book_show', array('id' => $book->getBookId()));
         }

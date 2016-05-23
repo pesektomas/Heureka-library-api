@@ -119,7 +119,7 @@ class UserController extends Controller
         $em->flush();
 
 	    if($user->getAuth()) {
-            $registrationIds = array("dWwphjN1e3c:APA91bHIJKflCHDY1i8OcDpOd1mtjLjAapVEAOeX1B6w02lBpLb9fg93Xu5xUNrRFbJfIrjgry8ouA3WxCxQ6bcRasqEW3rYxWl839SKD1WnsyrRjtJpDPWGC1KeIrMcxSMA7h-BkleZ");
+            $registrationIds = [$user->getGoogleToken()];
 
             $this->get('android.push')
             ->push($this->getParameter('android'), $registrationIds, 'Schváleno', 'Váš účet je aktivní');

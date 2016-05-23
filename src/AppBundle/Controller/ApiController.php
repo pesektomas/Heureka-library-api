@@ -162,19 +162,20 @@ class ApiController extends Controller
 	/**
 	 * get book history
 	 *
-	 * @Route("/book/history/{code}", name="api_book_history")
+	 * @Route("/book/history/{id}", name="api_book_history")
 	 * @Method("GET")
 	 */
-	public function bookHistoryAction($code)
+	public function bookHistoryAction($id)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$qb = $em->createQueryBuilder();
 		$bookHisotry = $qb->select(['u.name AS user_name', 'bh.type AS type', 'bh.from AS date', 'bh.to AS return', 'bh.rate AS rate'])
 			->from(BookHolder::class, 'bh')
 			->innerJoin('bh.bookUniq', 'bu')
+			->innerJoin('bu.book', 'b')
 			->innerJoin('bh.user', 'u')
-			->where('bu.code = :code')
-			->setParameter('code', $code)
+			->where('b.bookId = :id')
+			->setParameter('id', $id)
 			->orderBy('bh.from', 'DESC')
 			->getQuery()
 			->getResult();
@@ -354,6 +355,11 @@ class ApiController extends Controller
 	public function addUserAction($name, $email)
 	{
 		$em = $this->getDoctrine()->getManager();
+
+		if($em->find(User::class, $email) != null) {
+			return new JsonResponse(['info' => 'Váš požadavek byl přijat. Účet již existuje.']);
+		}
+
 		$user = new User();
 		$user->setName($name);
 		$user->setEmail($email);
@@ -414,7 +420,7 @@ class ApiController extends Controller
 	private function getHolders($em, $bookId)
 	{
 		$availableQb = $em->createQueryBuilder();
-		return $availableQb->select(['u.name AS user', 'bh.from'])
+		$holders = $availableQb->select(['u.name AS user', 'bh.from'])
 			->from(Book::class, 'b')
 			->innerJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
 			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
@@ -424,6 +430,16 @@ class ApiController extends Controller
 			->setParameter('bookId', $bookId)
 			->getQuery()
 			->getResult();
+
+		$clearHolders = [];
+		foreach ($holders as $holder) {
+			$clearHolders[] = [
+				'user' => $holder['user'],
+				'from' => $holder['from']->format('Y-m-d'),
+			];
+		}
+
+		return $clearHolders;
 	}
 
 	private function getAvailables($em, $bookId)

@@ -135,9 +135,8 @@ class ApiController extends Controller
 			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
 			->innerJoin('bh.user', 'u')
 			->where('u.email = :email')
-			->where('bh.to = :to')
+			->where('bh.to IS NULL')
 			->setParameter('email', $user)
-			->setParameter('to', null)
 			->getQuery()
 			->getResult();
 

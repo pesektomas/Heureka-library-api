@@ -226,7 +226,7 @@ class ApiController extends Controller
 	/**
 	 * borrow book
 	 *
-	 * @Route("/book/borrow/{id}/user/{user}", name="api_book_borrow")
+	 * @Route("/book/borrow/{code}/user/{user}", name="api_book_borrow")
 	 * @Method("POST")
 	 */
 	public function bookBorrowAction($code, $user)

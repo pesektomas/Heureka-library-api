@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use RMS\PushNotificationsBundle\Message\AndroidMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -117,9 +118,13 @@ class UserController extends Controller
         $em->flush();
 
 	    if($user->getAuth()) {
-		    // TODO DI
-		    $push = $this->get("android.push");
-		    $push->push($this->getParameter("google"));
+
+            $message = new AndroidMessage();
+            $message->setMessage('Oh my! A push notification!');
+            $message->setDeviceIdentifier('dSzRu0dmVDY:APA91bHJOhC32R0elkoG8zYKtwgHsvKKBVv5a-6PeGkfMsXZctojH2UMMrixEEOyjX9mgCWb201B5Hab5PRrCRvW18XqDjPvNzVJDwXBUoRurPGUmV9Fb_QsoxLQPbK3Gr_1-nCq1aR2');
+
+            $this->container->get('rms_push_notifications')->send($message);
+
 	    }
 
 	    return $this->redirectToRoute('user_index');

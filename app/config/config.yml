@@ -75,3 +75,9 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+
+rms_push_notifications:
+  android:
+      timeout: 5
+      gcm:
+          api_key: AIzaSyDGsibOZwMkB9m92TP5qcWPUxpx_zGqU38

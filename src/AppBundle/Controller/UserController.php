@@ -133,7 +133,7 @@ class UserController extends Controller
             );
             $fields = array
             (
-                'registration_ids' 	=> ['dSzRu0dmVDY:APA91bHJOhC32R0elkoG8zYKtwgHsvKKBVv5a-6PeGkfMsXZctojH2UMMrixEEOyjX9mgCWb201B5Hab5PRrCRvW18XqDjPvNzVJDwXBUoRurPGUmV9Fb_QsoxLQPbK3Gr_1-nCq1aR2'],
+                'registration_ids' 	=> 'dSzRu0dmVDY:APA91bHJOhC32R0elkoG8zYKtwgHsvKKBVv5a-6PeGkfMsXZctojH2UMMrixEEOyjX9mgCWb201B5Hab5PRrCRvW18XqDjPvNzVJDwXBUoRurPGUmV9Fb_QsoxLQPbK3Gr_1-nCq1aR2',
                 'data'			=> $msg
             );
 
@@ -148,7 +148,7 @@ class UserController extends Controller
             curl_setopt( $ch,CURLOPT_POST, true );
             curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
             curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, true );
             curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
             $result = curl_exec($ch );
             curl_close( $ch );

@@ -122,7 +122,7 @@ class UserController extends Controller
             $message = new AndroidMessage();
             $message->setMessage('Oh my! A push notification!');
             $message->setDeviceIdentifier('dSzRu0dmVDY:APA91bHJOhC32R0elkoG8zYKtwgHsvKKBVv5a-6PeGkfMsXZctojH2UMMrixEEOyjX9mgCWb201B5Hab5PRrCRvW18XqDjPvNzVJDwXBUoRurPGUmV9Fb_QsoxLQPbK3Gr_1-nCq1aR2');
-
+            $message->setGCM(true);
             $this->container->get('rms_push_notifications')->send($message);
 
 	    }

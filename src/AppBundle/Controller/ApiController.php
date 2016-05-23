@@ -93,8 +93,6 @@ class ApiController extends Controller
 	public function bookAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-
-		$qb = $em->createQueryBuilder();
 		$workingBooks = self::getBookDql($em)
 			->getQuery()
 			->getResult();
@@ -111,7 +109,6 @@ class ApiController extends Controller
 	public function internalBookAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-
 		$qb = $em->createQueryBuilder();
 		$internalBooks = $qb->select(['b.date', 'b.id'])
 			->from(InternalBook::class, 'b')
@@ -396,7 +393,8 @@ class ApiController extends Controller
 			->innerJoin('b.form', 'f')
 			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
 			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
-			->orderBy('b.name', 'ASC');
+			->orderBy('b.name', 'ASC')
+			;
 	}
 
 	private function prepareBook($em, $workingBooks)

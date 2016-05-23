@@ -78,6 +78,6 @@ assetic:
 
 rms_push_notifications:
   android:
-      timeout: 5
+      timeout: 5 # Seconds to wait for connection timeout, default is 5
       gcm:
           api_key: AIzaSyDGsibOZwMkB9m92TP5qcWPUxpx_zGqU38

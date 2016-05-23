@@ -136,7 +136,7 @@ class ApiController extends Controller
 			->innerJoin('bh.user', 'u')
 			->where('u.email = :email')
 			->where('bh.to IS NULL')
-			->setParameter('email', $user)
+			->setParameters(['email' => $user])
 			->getQuery()
 			->getResult();
 

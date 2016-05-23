@@ -128,7 +128,18 @@ class ApiController extends Controller
 	public function myBookAction($user)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$workingBooks = self::getBookDql($em)
+		$qb = $em->createQueryBuilder();
+		//self::getBookDql($em)
+		$workingBooks =
+
+
+			$qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
+			->from(Book::class, 'b')
+			->innerJoin('b.lang', 'l')
+			->innerJoin('b.form', 'f')
+			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
+			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
+			->orderBy('b.name', 'ASC')
 			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
 			->innerJoin('bh.user', 'u')
 			->where('u.email = :email')

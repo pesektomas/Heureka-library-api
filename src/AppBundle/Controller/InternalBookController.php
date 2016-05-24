@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -49,6 +50,22 @@ class InternalBookController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($internalBook);
             $em->flush();
+
+            $qb = $em->createQueryBuilder();
+            $users = $qb->select(['u.googleToken'])
+                ->from(User::class, 'u')
+                ->where('u.googleToken IS NOT NULL')
+                ->getQuery()
+                ->getResult();
+
+            $tokens = [];
+
+            foreach ($users as $user) {
+                $tokens[] = $user['googleToken'];
+            }
+
+            $this->get('android.push')
+                ->push($this->getParameter('android'), $tokens, 'Nové heurékoviny', 'Byly vloženy nové heurekoviny - ' . $internalBook->getDate()->format('m/Y'));
 
             return $this->redirectToRoute('internalbook_show', array('id' => $internalBook->getId()));
         }

@@ -118,7 +118,15 @@ class ApiController extends Controller
 			->getQuery()
 			->getResult();
 
-		return new JsonResponse($internalBooks);
+		$books = [];
+		foreach ($internalBooks as $b) {
+			$books[] = [
+				'id' => $b['id'],
+				'date' => $b['date']->format('Y-m-d'),
+			];
+		}
+
+		return new JsonResponse($books);
 	}
 
 	/**

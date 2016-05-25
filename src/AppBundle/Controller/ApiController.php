@@ -298,6 +298,15 @@ class ApiController extends Controller
 			->getQuery()
 			->getResult();
 
+		$reservations = [];
+		foreach ($bookReservation as $r)
+		{
+			$reservations[] = [
+				'user' => $r['user'],
+				'from' => $r['from']->format('Y-m-d'),
+			];
+		}
+
 		return new JsonResponse($bookReservation);
 	}
 

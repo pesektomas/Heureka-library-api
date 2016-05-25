@@ -307,7 +307,7 @@ class ApiController extends Controller
 			];
 		}
 
-		return new JsonResponse($bookReservation);
+		return new JsonResponse($reservations);
 	}
 
 	/**

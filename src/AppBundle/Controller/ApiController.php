@@ -376,6 +376,22 @@ class ApiController extends Controller
 	}
 
 	/**
+	 * return internal book
+	 *
+	 * @Route("/book/internal-book/{id}", name="api_book_book")
+	 * @Method("GET")
+	 */
+	public function bookInternalBookAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$internalBook = $em->getRepository(InternalBook::class)->find($id);
+		$response = new Response(stream_get_contents($internalBook->getBook()), 200, [
+			'Content-Type' => 'application/pdf',
+		]);
+		return $response;
+	}
+
+	/**
 	 * add suer
 	 *
 	 * @Route("/add-user/{name}/email/{email}", name="api_add-user")

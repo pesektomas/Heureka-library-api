@@ -48,6 +48,13 @@ class InternalBookController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            if ($internalBook->getBook() != null) {
+                $handle = fopen($internalBook->getBook(), 'r');
+                $bytes = fread($handle, filesize($internalBook->getBook()));
+                $internalBook->setBook($bytes);
+            }
+
             $em->persist($internalBook);
             $em->flush();
 

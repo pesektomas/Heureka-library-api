@@ -35,7 +35,7 @@ class ApiController extends Controller
 	/**
 	 * get languages
 	 *
-	 * @Route("/lang", name="api_lang")
+	 * @Route("/filters/lang", name="api_lang")
 	 * @Method("GET")
 	 */
 	public function langAction()
@@ -48,7 +48,7 @@ class ApiController extends Controller
 	/**
 	 * get forms
 	 *
-	 * @Route("/form", name="api_form")
+	 * @Route("/filters/form", name="api_form")
 	 * @Method("GET")
 	 */
 	public function formAction()
@@ -61,7 +61,7 @@ class ApiController extends Controller
 	/**
 	 * get localities
 	 *
-	 * @Route("/locality", name="api_locality")
+	 * @Route("/filters/locality", name="api_locality")
 	 * @Method("GET")
 	 */
 	public function localityAction()
@@ -74,7 +74,7 @@ class ApiController extends Controller
 	/**
 	 * get tags
 	 *
-	 * @Route("/tag", name="api_tag")
+	 * @Route("/filters/tag", name="api_tag")
 	 * @Method("GET")
 	 */
 	public function tagAction()

@@ -561,19 +561,29 @@ class ApiController extends Controller
 
 	private function getAvailables($em, $bookId)
 	{
-		$availableQb = $em->createQueryBuilder();
-		return $availableQb->select(['l.name AS place', '(COUNT(bu.code) - COUNT(bh.id)) AS available'])
-			->from(Book::class, 'b')
-			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
-			->innerJoin('bu.locality', 'l')
-			->leftJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
-			->where('bh.to IS NULL')
-			->andWhere('b.bookId = :bookId')
-			->orderBy('l.name', 'ASC')
-			->groupBy('l.name')
-			->setParameter('bookId', $bookId)
-			->getQuery()
-			->getResult();
+
+		$locality = $em->getRepository(Locality::class);
+		$data = [];
+		foreach($locality->findAll() as $locality) {
+
+			$availableQb = $em->createQueryBuilder();
+			$available = $availableQb->select(['(COUNT(bu.code) - COUNT(bh.id)) AS available'])
+				->from(Book::class, 'b')
+				->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
+				->leftJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
+				->where('bh.to IS NULL')
+				->andWhere('b.bookId = :bookId')
+				->andWhere('bu.locality = :locality')
+				->setParameter('bookId', $bookId)
+				->setParameter('locality', $locality->getId())
+				->getQuery();
+
+			$data[] = [
+				'place' => $locality->getName(),
+				'available' => $available->getSingleResult()['available'],
+			];
+		}
+		return $data;
 	}
 
 	private function getTags($em, $bookId)

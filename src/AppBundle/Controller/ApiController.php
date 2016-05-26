@@ -462,7 +462,7 @@ class ApiController extends Controller
 	private function getBookDql($em)
 	{
 		$qb = $em->createQueryBuilder();
-		return $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total'])
+		return $qb->select(['b.bookId AS book_id', 'b.name', 'b.detailLink AS detail_link', 'l.lang AS lang', 'f.form AS form', 'COUNT(bu.code) AS total', 'b.mime'])
 			->from(Book::class, 'b')
 			->innerJoin('b.lang', 'l')
 			->innerJoin('b.form', 'f')

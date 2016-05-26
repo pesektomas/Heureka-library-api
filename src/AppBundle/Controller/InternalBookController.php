@@ -48,12 +48,7 @@ class InternalBookController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            if ($internalBook->getBook() != null) {
-                $handle = fopen($internalBook->getBook(), 'r');
-                $bytes = fread($handle, filesize($internalBook->getBook()));
-                $internalBook->setBook($bytes);
-            }
+            $internalBook->setBook(self::getBook($internalBook));
 
             $em->persist($internalBook);
             $em->flush();
@@ -107,12 +102,16 @@ class InternalBookController extends Controller
      */
     public function editAction(Request $request, InternalBook $internalBook)
     {
+        // TODO !!!
+        $internalBook->setBook(null);
+
         $deleteForm = $this->createDeleteForm($internalBook);
         $editForm = $this->createForm('AppBundle\Form\InternalBookType', $internalBook);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $internalBook->setBook(self::getBook($internalBook));
             $em->persist($internalBook);
             $em->flush();
 
@@ -160,5 +159,14 @@ class InternalBookController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    private function getBook(InternalBook $internalBook) {
+        if ($internalBook->getBook() != null) {
+            $handle = fopen($internalBook->getBook(), 'r');
+            $bytes = fread($handle, filesize($internalBook->getBook()));
+            return $bytes;
+        }
+        return null;
     }
 }

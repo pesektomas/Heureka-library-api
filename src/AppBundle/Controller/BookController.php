@@ -50,17 +50,8 @@ class BookController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-	        if ($book->getImage() != null) {
-		        $handle = fopen($book->getImage(), 'r');
-		        $bytes = fread($handle, filesize($book->getImage()));
-		        $book->setImage($bytes);
-	        }
-
-	        if ($book->getBook() != null) {
-		        $handle = fopen($book->getBook(), 'r');
-		        $bytes = fread($handle, filesize($book->getBook()));
-		        $book->setBook($bytes);
-	        }
+	        $book->setImage(self::getImage($book));
+	        $book->setBook(self::getBook($book));
 
 	        $em->persist($book);
             $em->flush();
@@ -115,12 +106,20 @@ class BookController extends Controller
     public function editAction(Request $request, Book $book)
     {
         $deleteForm = $this->createDeleteForm($book);
-        $editForm = $this->createForm('AppBundle\Form\BookType', $book);
+
+	    $book->setImage(null);
+	    $book->setBook(null);
+
+	    $editForm = $this->createForm('AppBundle\Form\BookType', $book);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($book);
+
+	        $book->setImage(self::getImage($book));
+	        $book->setBook(self::getBook($book));
+
+	        $em->persist($book);
             $em->flush();
 
             return $this->redirectToRoute('book_edit', array('id' => $book->getBookId()));
@@ -168,4 +167,22 @@ class BookController extends Controller
             ->getForm()
         ;
     }
+
+	private function getBook(Book $book) {
+		if ($book->getBook() != null) {
+			$handle = fopen($book->getBook(), 'r');
+			$bytes = fread($handle, filesize($book->getBook()));
+			return $bytes;
+		}
+		return null;
+	}
+
+	private function getImage(Book $book) {
+		if ($book->getImage() != null) {
+			$handle = fopen($book->getImage(), 'r');
+			$bytes = fread($handle, filesize($book->getImage()));
+			return $bytes;
+		}
+		return null;
+	}
 }

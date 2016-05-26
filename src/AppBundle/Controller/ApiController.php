@@ -378,7 +378,7 @@ class ApiController extends Controller
 	/**
 	 * return internal book
 	 *
-	 * @Route("/book/internal-book/{id}", name="api_book_book")
+	 * @Route("/book/internal-book/{id}", name="api_book_internal_book")
 	 * @Method("GET")
 	 */
 	public function bookInternalBookAction($id)

@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * API controller.
@@ -95,6 +96,23 @@ class ApiController extends Controller
 		$em = $this->getDoctrine()->getManager();
 
 		$workingBooks = self::getBookDql($em)
+			->getQuery()
+			->getResult();
+
+		return new JsonResponse(self::prepareBook($em, $workingBooks));
+	}
+
+	/**
+	 * get books
+	 *
+	 * @Route("/books-rate", name="api_books_rate")
+	 * @Method("GET")
+	 */
+	public function bookRateAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$workingBooks = self::getBookDqlWithRate($em)
 			->getQuery()
 			->getResult();
 
@@ -320,22 +338,30 @@ class ApiController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 
-		// update holder
-		$holderRepository = $em->getRepository(BookHolder::class);
-		$holder = $holderRepository->findOneBy([
-			'book' => $em->find(Book::class, $id),
-			'user' => $em->find(User::class, $user),
-		]);
+		if($place == 0) {
+			$holder = new BookHolder();
+			$holder->setBook($em->find(Book::class, $id));
+			$holder->setUser($em->find(User::class, $user));
+			$holder->setType(BookHolder::TYPE_BORROW);
+			$holder->setFrom(new \DateTime());
+		} else {
+			// update holder
+			$holderRepository = $em->getRepository(BookHolder::class);
+			$holder = $holderRepository->findOneBy([
+				'book' => $em->find(Book::class, $id),
+				'user' => $em->find(User::class, $user),
+			]);
+
+			// update bookUniq place
+			$bookUniq = $holder->getBookUniq();
+			$bookUniq->setLocality($em->find(Locality::class, $place));
+			$em->persist($bookUniq);
+		}
 
 		$holder->setRateText($ratetext);
 		$holder->setRate($rate);
 		$holder->setTo(new \DateTime());
 		$em->persist($holder);
-
-		// update bookUniq place
-		$bookUniq = $holder->getBookUniq();
-		$bookUniq->setLocality($em->find(Locality::class, $place));
-		$em->persist($bookUniq);
 
 		$em->flush();
 
@@ -467,6 +493,30 @@ class ApiController extends Controller
 			->innerJoin('b.lang', 'l')
 			->innerJoin('b.form', 'f')
 			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
+			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
+			->orderBy('b.name', 'ASC')
+			;
+	}
+
+	private function getBookDqlWithRate($em)
+	{
+		$qb = $em->createQueryBuilder();
+		return $qb->select([
+			'b.bookId AS book_id',
+			'b.name',
+			'b.detailLink AS detail_link',
+			'l.lang AS lang',
+			'f.form AS form',
+			'COUNT(bu.code) AS total',
+			'AVG(bh.rate) AS avg_rate',
+			'COUNT(bh.rate) AS cnt_rate',
+			'b.mime'
+		])
+			->from(Book::class, 'b')
+			->innerJoin('b.lang', 'l')
+			->innerJoin('b.form', 'f')
+			->leftJoin(BookUniq::class, 'bu', 'WITH', 'b.bookId = bu.book')
+			->leftJoin(BookHolder::class, 'bh', 'WITH', 'bu.code = bh.bookUniq')
 			->groupBy('b.bookId, b.name, b.detailLink, l.lang, f.form')
 			->orderBy('b.name', 'ASC')
 			;

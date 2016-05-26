@@ -27,6 +27,7 @@ class BookType extends AbstractType
 			        'Kindle' => 'application/vnd.amazon.ebook',
 			        'EPUB' => 'application/x-dtbook+xml',
 			        'Audio' => 'audio/mpeg',
+			        'ZIP' => 'application/zip',
 		        ],
             ])
             ->add('lang')

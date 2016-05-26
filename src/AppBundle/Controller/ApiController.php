@@ -157,7 +157,6 @@ class ApiController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$workingBooks = self::getBookDqlWithRate($em)
-			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
 			->innerJoin('bh.user', 'u')
 			->where('bh.to IS NULL AND u.email = :user')
 			->setParameter('user', $user)
@@ -231,7 +230,6 @@ class ApiController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$workingBooks = self::getBookDqlWithRate($em)
-			->innerJoin(BookHolder::class, 'bh', 'WITH', 'bh.bookUniq = bu.code')
 			->innerJoin('bh.user', 'u')
 			->where('u.email = :email')
 			->setParameter('email', $user)
